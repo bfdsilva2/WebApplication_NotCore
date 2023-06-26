@@ -1,0 +1,52 @@
+﻿
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
+
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+
+    {
+        <div class="form-text">
+            @Html.Label("First Name ")
+        </div>
+
+        <div class="form-group row">
+            @Html.TextBox("FirstName")
+        </div>
+
+        <div class="form-text">
+            @Html.Label("Last Name ")
+        </div>
+
+        <div class="form-group row">
+            @Html.TextBox("LasttName")
+        </div>
+
+        <div class="form-group row">
+            <div class="form-text">
+                @Html.Label("Listbox")
+            </div>
+            @Html.ListBox("Select Skills", new List<SelectListItem> {
+            new SelectListItem{ Text=".NET Framework",Value="1" },
+            new SelectListItem{ Text="MVC",Value="2" },
+            new SelectListItem{ Text="C#",Value="3" },
+            new SelectListItem{ Text="SQL",Value="4" }
+            })
+        </div>
+
+        <div class="form-group row">
+            @Html.ActionLink("Click here", "/")
+        </div>
+
+        <div class="form-group row">
+            <button type="submit">Submit</button>
+        </div>
+    }    
+
+
+</main>
+
+
+
+
+

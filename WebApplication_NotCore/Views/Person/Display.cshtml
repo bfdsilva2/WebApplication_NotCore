@@ -1,0 +1,100 @@
+﻿@model WebApplication_NotCore.Models.PersonModel
+
+@{
+    ViewBag.Title = "Display";
+}
+
+<h2>Index</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="error-message">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<table id="tblPerson" class="table table-bordered table-striped table-responsive table-hover">
+    <thead>
+        <tr>
+            <th align="left" class="productth">IdPerson</th>
+            <th align="left" class="productth">Name</th>
+            <th align="left" class="productth">Fullname</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/M/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+
+        });
+    </script>
+
+
+    <script type="text/javascript">
+
+    $(function () {
+        LoadData();
+        $("#btnSave").click(function () {
+            //alert("");
+            var std = {};
+            std.studentName = $("#StudentName").val();
+            std.studentAddress = $("#StudentAddress").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("createStudent")',
+                data: '{std: ' + JSON.stringify(std) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                   // alert("Data has been added successfully.");
+                    LoadData();
+                },
+                error: function () {
+                    alert("Error while inserting data");
+                }
+            });
+            return false;
+        });
+    });
+
+    function LoadData() {
+        $("#tblPerson tbody tr").remove();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Display")',
+            dataType: 'json',
+            data: { idPerson: '' },
+            success: function (data) {
+                var items = '';
+                $.each(data, function (i, item) {
+                    var rows = "<tr>"
+                    + "<td class='prtoducttd'>" + item.idPerson + "</td>"
+                    + "<td class='prtoducttd'>" + item.Name + "</td>"
+                    + "<td class='prtoducttd'>" + item.Fullname + "</td>"
+                    + "</tr>";
+                    $('#tblPerson tbody').append(rows);
+                });
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+        return false;
+    }
+    </script>
+}
